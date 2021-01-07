@@ -1,0 +1,32 @@
+productName: "Panfu Desktop"
+appId: "com.pandaland.desktop"
+
+files:
+  - "!build/"
+  - "!plugins/"
+
+extraResources:
+  - from: "plugins/${os}/${arch}"
+    to: "plugins"
+    filter:
+      - "**/*"
+
+mac:
+  target: dmg
+
+win:
+  target:
+    - target: "nsis"
+      arch:
+        - x64
+        - ia32
+    - target: "portable"
+      arch:
+        - x64
+        - ia32
+
+nsis:
+  deleteAppDataOnUninstall: true
+
+directories:
+  output: "release"
