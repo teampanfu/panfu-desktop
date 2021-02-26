@@ -2,7 +2,6 @@ productName: "Panfu Desktop"
 appId: "com.pandaland.desktop"
 
 files:
-  - "!build/"
   - "!plugins/"
 
 extraResources:

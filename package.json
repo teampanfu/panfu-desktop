@@ -1,19 +1,19 @@
 {
   "name": "panfu-desktop",
-  "version": "1.0.0",
-  "description": "Panfu on Desktop for Windows & Mac - with integrated Flash Player.",
+  "version": "1.1.0",
+  "description": "Panfu's desktop application with built-in Flash Player for Windows and macOS.",
   "scripts": {
     "package": "electron-builder -p never",
-    "release": "electron-builder -p always"
+    "release": "electron-builder"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/teampanfu/panfu-desktop"
   },
-  "author": "Panfu.us <support@panfu.us>",
+  "author": "Panfu.us <webmaster@panfu.us>",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^11.1.1",
+    "electron": "^11.3.0",
     "electron-builder": "^22.9.1"
   }
 }
