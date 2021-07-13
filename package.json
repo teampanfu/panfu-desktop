@@ -13,7 +13,7 @@
   "author": "Panfu.us <webmaster@panfu.us>",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^11.3.0",
-    "electron-builder": "^22.9.1"
+    "electron": "^11.4.10",
+    "electron-builder": "^22.11.7"
   }
 }
