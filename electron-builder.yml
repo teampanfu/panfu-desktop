@@ -1,5 +1,5 @@
-productName: "Panfu Desktop"
 appId: "com.pandaland.desktop"
+productName: "Panfu Desktop"
 
 files:
   - "!plugins/"
@@ -10,8 +10,8 @@ extraResources:
     filter:
       - "**/*"
 
-mac:
-  target: dmg
+linux:
+  target: "deb"
 
 win:
   target:
