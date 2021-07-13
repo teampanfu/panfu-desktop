@@ -1,9 +1,9 @@
 matrix:
   include:
     - os: osx
-      osx_image: xcode10.2
+      osx_image: xcode12
       language: node_js
-      node_js: "12"
+      node_js: "14"
       env:
         - ELECTRON_CACHE=$HOME/.cache/electron
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
@@ -28,7 +28,7 @@ script:
         -v ~/.cache/electron:/root/.cache/electron \
         -v ~/.cache/electron-builder:/root/.cache/electron-builder \
         electronuserland/builder:wine \
-        /bin/bash -c "yarn --link-duplicates --pure-lockfile && yarn release --win"
+        /bin/bash -c "yarn --link-duplicates --pure-lockfile && yarn release --linux --win"
     else
       yarn release
     fi
@@ -37,5 +37,5 @@ before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
 
 branches:
-  except:
-    - "/^v\\d+\\.\\d+\\.\\d+$/"
+  only:
+    - main
