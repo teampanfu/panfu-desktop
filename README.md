@@ -7,17 +7,19 @@
 <a href="LICENSE"><img src="https://img.shields.io/github/license/teampanfu/panfu-desktop.svg" alt="License"></a>
 </p>
 
-## Panfu Desktop
+## Introduction
 
-This is the official desktop application of **Panfu.us** with a built-in Flash Player.
+This is the official desktop application of [Panfu.us](https://www.panfu.us), with built-in Flash Player.
 
 It allows you to continue playing Panfu after the Flash Player has been removed from all major browsers.
 
-**We are currently working on an HTML5 version and will delete the desktop application as soon as the new version is ready.**
+**NOTE: We are already working on an HTML5 version of Panfu and will no longer support the desktop application once it is released.**
 
 ## Contributing
 
-We are not planning any further updates to the desktop application and will no longer support Flash Player as soon as the new version is ready.
+We are not planning any further major changes to the desktop application, however, you can fork the repository and update it yourself.
+
+Please do not remove the credits.
 
 ## License
 
