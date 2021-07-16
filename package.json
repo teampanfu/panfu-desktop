@@ -4,7 +4,8 @@
   "description": "Panfu's desktop application with built-in Flash Player.",
   "scripts": {
     "package": "electron-builder -p never",
-    "release": "electron-builder"
+    "release": "electron-builder",
+    "start": "electron ."
   },
   "repository": {
     "type": "git",
@@ -12,6 +13,9 @@
   },
   "author": "Panfu.us <webmaster@panfu.us>",
   "license": "MIT",
+  "dependencies": {
+    "electron-updater": "^4.3.9"
+  },
   "devDependencies": {
     "electron": "^11.4.10",
     "electron-builder": "^22.11.7"
