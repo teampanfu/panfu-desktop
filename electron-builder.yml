@@ -13,6 +13,9 @@ extraResources:
 linux:
   target: "deb"
 
+mac:
+  target: "dmg"
+
 win:
   target:
     - target: "nsis"
