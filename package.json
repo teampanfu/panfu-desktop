@@ -1,6 +1,6 @@
 {
   "name": "panfu-desktop",
-  "version": "1.2.0",
+  "version": "1.2.1-dev",
   "description": "Panfu's desktop application with built-in Flash Player.",
   "scripts": {
     "package": "electron-builder -p never",
