@@ -77,7 +77,7 @@ if (!gotTheLock) {
             if (process.platform !== 'darwin') app.quit()
         })
 
-        // Check for updates
-        autoUpdater.checkForUpdatesAndNotify()
+        // Silently auto update
+        autoUpdater.checkForUpdates()
     })
 }
