@@ -10,21 +10,28 @@ if (!gotTheLock) {
 } else {
     // Specify the path to the Flash Player plugin
     let pluginName
+    let resourcesPath = app.isPackaged ? process.resourcesPath : __dirname
 
     switch (process.platform) {
         case 'win32':
-            pluginName = 'pepflashplayer.dll'
+            pluginName = app.isPackaged ? 'pepflashplayer.dll' : 'win/x64/pepflashplayer.dll'
             break
         case 'darwin':
             pluginName = 'PepperFlashPlayer.plugin'
             break
+        case 'freebsd':
         case 'linux':
+        case 'netbsd':
+        case 'openbsd':
             pluginName = 'libpepflashplayer.so'
+
+            // Disable Chromium's sandbox
+            app.commandLine.appendSwitch('no-sandbox')
     }
 
-    app.commandLine.appendSwitch('ppapi-flash-path', path.join(process.resourcesPath, 'plugins', pluginName))
+    app.commandLine.appendSwitch('ppapi-flash-path', path.join(resourcesPath, 'plugins', pluginName))
 
-    // Create the main window
+    // Create the browser window
     let window = null
 
     function createWindow() {
@@ -34,12 +41,11 @@ if (!gotTheLock) {
             show: false,
             autoHideMenuBar: true,
             webPreferences: {
+                contextIsolation: true,
                 plugins: true
             }
         })
-
         window.once('ready-to-show', () => window.show())
-
         window.loadURL('https://www.panfu.us/play')
     }
 
@@ -55,9 +61,9 @@ if (!gotTheLock) {
         })
     })
 
-    // Application is ready
+    // Set everything up as soon as our application is ready
     app.whenReady().then(() => {
-        createWindow();
+        createWindow()
 
         // Open a window if none are open (macOS)
         app.on('activate', () => {
@@ -78,6 +84,6 @@ if (!gotTheLock) {
         })
 
         // Silently auto update
-        autoUpdater.checkForUpdates()
+        if (app.isPackaged) autoUpdater.checkForUpdates()
     })
 }
