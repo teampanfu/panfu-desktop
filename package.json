@@ -14,10 +14,10 @@
   "author": "Panfu.us <webmaster@panfu.us>",
   "license": "MIT",
   "dependencies": {
-    "electron-updater": "^4.3.9"
+    "electron-updater": "^5.0.1"
   },
   "devDependencies": {
     "electron": "^11.4.10",
-    "electron-builder": "^22.11.7"
+    "electron-builder": "^23.0.3"
   }
 }
