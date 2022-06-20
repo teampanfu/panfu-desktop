@@ -1,5 +1,8 @@
-productName: "Panfu Desktop"
 appId: "com.pandaland.desktop"
+productName: "Panfu Desktop"
+
+directories:
+  output: "release"
 
 files:
   - "!plugins/"
@@ -9,9 +12,6 @@ extraResources:
     to: "plugins"
     filter:
       - "**/*"
-
-linux:
-  target: "deb"
 
 mac:
   target: "dmg"
@@ -24,5 +24,5 @@ win:
 nsis:
   deleteAppDataOnUninstall: true
 
-directories:
-  output: "release"
+linux:
+  target: "deb"
