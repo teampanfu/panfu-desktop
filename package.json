@@ -1,18 +1,22 @@
 {
   "name": "panfu-desktop",
   "version": "1.2.2",
-  "description": "Panfu's desktop application with built-in Flash Player.",
-  "scripts": {
-    "package": "electron-builder -p never",
-    "release": "electron-builder",
-    "start": "electron ."
+  "description": "A desktop application for Panfu with built-in Flash Player.",
+  "homepage": "https://www.panfu.us",
+  "bugs": {
+    "url": "https://github.com/teampanfu/panfu-desktop/issues"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/teampanfu/panfu-desktop"
   },
-  "author": "Panfu.us <webmaster@panfu.us>",
   "license": "MIT",
+  "author": "Panfu.us <webmaster@panfu.us>",
+  "scripts": {
+    "package": "electron-builder --publish never",
+    "release": "electron-builder --publish always",
+    "start": "electron ."
+  },
   "dependencies": {
     "electron-updater": "^5.0.1"
   },
