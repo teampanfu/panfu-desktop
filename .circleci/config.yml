@@ -5,7 +5,7 @@ jobs:
       - image: electronuserland/builder:wine
     steps:
       - checkout
-      - run: yarn && yarn run --x64 --ia32 --linux --win
+      - run: yarn && yarn release --x64 --ia32 --linux --win
 
   build_macos:
     macos:
