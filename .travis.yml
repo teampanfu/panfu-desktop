@@ -27,14 +27,14 @@ script:
         -v ~/.cache/electron:/root/.cache/electron \
         -v ~/.cache/electron-builder:/root/.cache/electron-builder \
         electronuserland/builder:wine \
-        /bin/bash -c "npm ci && npm run release --x64 --ia32 --linux --win"
+        /bin/bash -c "yarn --link-duplicates --pure-lockfile && yarn release --x64 --ia32 --linux --win"
     else
-      npm run release
+      yarn release
     fi
 
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
 
 branches:
-  only:
-    - main
+  except:
+    - "/^v\\d+\\.\\d+\\.\\d+$/"
