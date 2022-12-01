@@ -12,10 +12,19 @@ if (!gotTheLock) {
   app.quit()
 } else {
   const createMenu = () => {
-    const menu = Menu.getApplicationMenu()
-    const items = menu.items.filter(item => item.role !== 'help')
+    const template = [
+      { role: 'reload' },
+      { role: 'forceReload' },
+      { role: 'toggleDevTools' },
+      { type: 'separator' },
+      { role: 'resetZoom' },
+      { role: 'zoomIn' },
+      { role: 'zoomOut' },
+      { type: 'separator' },
+      { role: 'togglefullscreen' }
+    ]
 
-    Menu.setApplicationMenu(Menu.buildFromTemplate(items))
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template))
   }
 
   const createWindow = () => {
