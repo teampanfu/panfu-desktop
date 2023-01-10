@@ -40,11 +40,17 @@ if (!gotTheLock) {
       y: mainWindowState.y,
       width: mainWindowState.width,
       height: mainWindowState.height,
+      show: false,
       autoHideMenuBar: true,
       webPreferences: {
         contextIsolation: true,
         plugins: true
       }
+    })
+
+    // Show the window when it is ready to avoid visual flash
+    mainWindow.once('ready-to-show', () => {
+      mainWindow.show()
     })
 
     // Open new windows with the default browser
@@ -116,7 +122,6 @@ if (!gotTheLock) {
   app.whenReady().then(() => {
     createMenu()
     createWindow()
-
     autoUpdater.checkForUpdates()
 
     // Whereas Linux and Windows apps quit when they have no windows open,
