@@ -26,3 +26,8 @@ nsis:
 
 linux:
   target: "deb"
+
+protocols:
+  - name: "Panfu Desktop"
+    schemes:
+      - "panfu-desktop"
