@@ -21,7 +21,7 @@ if (!gotTheLock) {
   const createWindow = () => {
     const mainWindowState = windowStateKeeper({
       defaultWidth: 1040,
-      defaultHeight: 770,
+      defaultHeight: 730,
     });
 
     const mainWindow = new BrowserWindow({
