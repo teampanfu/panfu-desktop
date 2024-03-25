@@ -1,4 +1,4 @@
-const { app, BrowserWindow, clipboard, dialog, Menu, shell } = require('electron');
+const { app, BrowserWindow, Menu, shell } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const windowStateKeeper = require('electron-window-state');
 const path = require('path');
@@ -39,7 +39,7 @@ if (!gotTheLock) {
 
     mainWindow.webContents.on('new-window', (event, url) => {
       event.preventDefault();
-      openNewWindow(url);
+      shell.openExternal(url);
     });
 
     mainWindow.webContents.on('context-menu', (event, params) => {
@@ -49,25 +49,6 @@ if (!gotTheLock) {
     mainWindow.loadURL('https://www.panfu.us/play');
 
     mainWindowState.manage(mainWindow);
-  };
-
-  const openNewWindow = (url) => {
-    const options = {
-      type: 'question',
-      buttons: ['Open in Default Browser', 'Copy to Clipboard', 'Cancel'],
-      defaultId: 0,
-      title: 'Open Link',
-      message: 'Choose an action for the link:',
-      detail: url,
-    };
-  
-    dialog.showMessageBox(null, options).then(({ response }) => {
-      if (response === 0) {
-        shell.openExternal(url);
-      } else if (response === 1) {
-        clipboard.writeText(url);
-      }
-    });
   };
 
   const initializeFlashPlugin = () => {
