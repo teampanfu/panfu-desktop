@@ -10,8 +10,11 @@ if (!gotTheLock) {
 } else {
   const createMenu = () => {
     const menu = Menu.getApplicationMenu();
-    const filteredItems = menu.items.find(item => item.role === 'viewmenu').submenu.items;
-    Menu.setApplicationMenu(Menu.buildFromTemplate(filteredItems));
+    const viewMenu = menu.items.find(item => item.role === 'viewmenu');
+    if (viewMenu) {
+      const filteredItems = viewMenu.submenu.items;
+      Menu.setApplicationMenu(Menu.buildFromTemplate(filteredItems));
+    }
   };
 
   const createWindow = () => {
@@ -21,10 +24,7 @@ if (!gotTheLock) {
     });
 
     const mainWindow = new BrowserWindow({
-      x: mainWindowState.x,
-      y: mainWindowState.y,
-      width: mainWindowState.width,
-      height: mainWindowState.height,
+      ...mainWindowState,
       show: false,
       autoHideMenuBar: true,
       webPreferences: {
@@ -33,28 +33,29 @@ if (!gotTheLock) {
       },
     });
 
-    mainWindow.once('ready-to-show', () => {
-      mainWindow.show();
-    });
+    // Show the main window when it's ready
+    mainWindow.once('ready-to-show', () => mainWindow.show());
 
+    // Open external links in the user's default browser
     mainWindow.webContents.on('new-window', (event, url) => {
       event.preventDefault();
       shell.openExternal(url);
     });
 
+    // Display context menu
     mainWindow.webContents.on('context-menu', (event, params) => {
       Menu.getApplicationMenu().popup(mainWindow, params.x, params.y);
     });
 
+    // Load the URL into the main window
     mainWindow.loadURL('https://www.panfu.us/play');
 
+    // Manage window state
     mainWindowState.manage(mainWindow);
   };
 
   const initializeFlashPlugin = () => {
-    const resourcesPath = app.isPackaged ? process.resourcesPath : __dirname;
     let pluginName;
-
     switch (process.platform) {
       case 'win32':
         pluginName = app.isPackaged ? 'pepflashplayer.dll' : 'win/x64/pepflashplayer.dll';
@@ -65,6 +66,8 @@ if (!gotTheLock) {
       default:
         pluginName = 'libpepflashplayer.so';
     }
+
+    const resourcesPath = app.isPackaged ? process.resourcesPath : __dirname;
 
     if (['freebsd', 'linux', 'netbsd', 'openbsd'].includes(process.platform)) {
       app.commandLine.appendSwitch('no-sandbox');
@@ -83,7 +86,9 @@ if (!gotTheLock) {
   });
 
   app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit();
+    if (process.platform !== 'darwin') {
+      app.quit();
+    }
   });
 
   initializeFlashPlugin();
@@ -94,7 +99,9 @@ if (!gotTheLock) {
     autoUpdater.checkForUpdates();
 
     app.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+      if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+      }
     });
   });
 }
