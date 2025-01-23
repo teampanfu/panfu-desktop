@@ -27,6 +27,8 @@ jobs:
         run: yarn install
 
       - name: Build and release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
             yarn release --x64 --ia32 --win
