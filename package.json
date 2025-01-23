@@ -1,8 +1,8 @@
 {
   "name": "panfu-desktop",
   "version": "1.4.4",
-  "description": "The desktop application for Panfu.us with integrated Flash Player.",
-  "homepage": "https://www.panfu.us",
+  "description": "The desktop application for Panfu.me with integrated Flash Player.",
+  "homepage": "https://www.panfu.me",
   "bugs": {
     "url": "https://github.com/teampanfu/panfu-desktop/issues"
   },
@@ -11,7 +11,7 @@
     "url": "https://github.com/teampanfu/panfu-desktop"
   },
   "license": "MIT",
-  "author": "Panfu.us <webmaster@panfu.us>",
+  "author": "Panfu.me <webmaster@panfu.me>",
   "scripts": {
     "package": "electron-builder --publish never",
     "release": "electron-builder --publish always",

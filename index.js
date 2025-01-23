@@ -48,7 +48,7 @@ if (!gotTheLock) {
     });
 
     // Load the URL into the main window
-    mainWindow.loadURL('https://www.panfu.us/play');
+    mainWindow.loadURL('https://www.panfu.me/play');
 
     // Manage window state
     mainWindowState.manage(mainWindow);
