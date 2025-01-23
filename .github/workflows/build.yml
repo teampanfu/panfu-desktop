@@ -1,0 +1,38 @@
+name: Build Desktop App
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build and release
+        run: |
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            yarn release --x64 --ia32 --win
+          elif [ "${{ matrix.os }}" = "macos-latest" ]; then
+            yarn release --mac
+          else
+            yarn release --linux
+          fi
+        shell: bash
