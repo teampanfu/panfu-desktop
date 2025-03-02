@@ -33,7 +33,7 @@ jobs:
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
             yarn release --x64 --ia32 --win
           elif [ "${{ matrix.os }}" = "macos-latest" ]; then
-            yarn release --mac --universal
+            yarn release --mac --x64 --arm64 --universal
           else
             yarn release --linux
           fi
