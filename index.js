@@ -49,7 +49,9 @@ const createWindow = () => {
     if (process.platform === 'win32') {
       if (input.key === 'F5') {
         if (input.control) {
-          mainWindow.webContents.reloadIgnoringCache();
+          mainWindow.webContents.session.clearCache().then(() => {
+            mainWindow.webContents.reloadIgnoringCache();
+          });
         } else {
           mainWindow.webContents.reload();
         }
