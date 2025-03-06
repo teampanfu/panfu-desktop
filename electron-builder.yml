@@ -1,33 +1,38 @@
-appId: "com.pandaland.desktop"
-productName: "Panfu Desktop"
+appId: com.pandaland.desktop
+productName: Panfu Desktop
 
 directories:
-  output: "release"
+  output: release
 
 files:
   - "!plugins/"
 
 extraResources:
   - from: "plugins/${os}/${arch}"
-    to: "plugins"
+    to: plugins
     filter:
       - "**/*"
 
 mac:
-  target: "dmg"
+  target:
+    - dmg
+  category: public.app-category.games
 
 win:
   target:
-    - "nsis"
-    - "portable"
+    - nsis
+    - portable
 
 nsis:
   deleteAppDataOnUninstall: true
 
 linux:
-  target: "deb"
+  target:
+    - deb
+    - AppImage
+  category: Game
 
 protocols:
-  - name: "Panfu Desktop"
+  - name: Panfu Desktop
     schemes:
-      - "panfu-desktop"
+      - panfu-desktop
