@@ -35,6 +35,6 @@ jobs:
           elif [ "${{ matrix.os }}" = "macos-latest" ]; then
             yarn release --mac --x64
           else
-            yarn release --linux
+            yarn release --linux --x64 --ia32
           fi
         shell: bash
