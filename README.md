@@ -17,8 +17,8 @@ The official desktop application for Panfu.me with integrated Flash Player suppo
 - Cross-platform support
 - Automatic updates
 - Window state persistence
-- Zoom controls (Windows)
-- Reload shortcuts (Windows)
+- Zoom controls (Windows & macOS)
+- Reload shortcuts (Windows & macOS)
 
 > **Note:** This application uses Electron 11, as it's the last version that includes Chromium with PPAPI Flash Plugin support.
 
