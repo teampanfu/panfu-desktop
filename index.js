@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, shell } = require('electron');
+const { app, BrowserWindow, Menu, screen, shell } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const windowStateKeeper = require('electron-window-state');
 const path = require('path');
@@ -19,6 +19,16 @@ const handleZoom = (webContents, zoomIn) => {
   }
 };
 
+const reloadPage = (webContents, clearCache = false) => {
+  if (clearCache) {
+    webContents.session.clearCache().then(() => {
+      webContents.reload();
+    });
+  } else {
+    webContents.reload();
+  }
+};
+
 const createMenu = () => {
   const menu = Menu.getApplicationMenu();
   if (!menu) return;
@@ -29,49 +39,94 @@ const createMenu = () => {
   Menu.setApplicationMenu(Menu.buildFromTemplate(viewMenu.submenu.items));
 };
 
-const createWindow = () => {
-  const mainWindowState = windowStateKeeper({
-    defaultWidth: 1040,
-    defaultHeight: 730,
-  });
-
-  const mainWindow = new BrowserWindow({
-    ...mainWindowState,
-    show: false,
+const createBrowserWindow = (options = {}) => {
+  const window = new BrowserWindow({
+    minWidth: 640,
+    minHeight: 480,
     autoHideMenuBar: true,
     webPreferences: {
       contextIsolation: true,
       plugins: true,
     },
+    ...options,
   });
 
-  mainWindow.webContents.on('before-input-event', (event, input) => {
-    if (process.platform === 'win32') {
-      if (input.key === 'F5') {
-        if (input.control) {
-          mainWindow.webContents.session.clearCache().then(() => {
-            mainWindow.webContents.reloadIgnoringCache();
-          });
-        } else {
-          mainWindow.webContents.reload();
-        }
-        event.preventDefault();
-      } else if (input.control && (input.key === '+' || input.key === '-')) {
-        handleZoom(mainWindow.webContents, input.key === '+');
-        event.preventDefault();
-      }
+  window.once('ready-to-show', () => window.show());
+
+  window.webContents.on('before-input-event', (event, input) => {
+    if (input.key === 'F5' || (input.key === 'r' && (input.control || input.meta))) {
+      reloadPage(window.webContents, input.control || input.shift || input.meta);
+      event.preventDefault();
+    } else if ((input.control || input.meta) && (input.key === '+' || input.key === '-' || input.key === '=')) {
+      handleZoom(window.webContents, input.key === '+' || input.key === '=');
+      event.preventDefault();
     }
   });
 
-  mainWindow.once('ready-to-show', () => mainWindow.show());
-
-  mainWindow.webContents.on('new-window', (event, url) => {
-    event.preventDefault();
-    shell.openExternal(url);
+  window.webContents.on('context-menu', (event, params) => {
+    const appMenu = Menu.getApplicationMenu();
+    if (appMenu) {
+      appMenu.popup(window, params.x, params.y);
+    }
   });
 
-  mainWindow.webContents.on('context-menu', (event, params) => {
-    Menu.getApplicationMenu().popup(mainWindow, params.x, params.y);
+  window.webContents.on('new-window', (event, url) => {
+    event.preventDefault();
+
+    if (url.includes('oloko.me')) {
+      const existingOlokoWindow = BrowserWindow.getAllWindows().find(win => {
+        const winURL = win.webContents.getURL();
+        return winURL && winURL.includes('oloko.me');
+      });
+
+      if (existingOlokoWindow) {
+        existingOlokoWindow.focus();
+      } else if (BrowserWindow.getAllWindows().length === 1) {
+        const currentWindow = BrowserWindow.getAllWindows()[0];
+        const [currentX, currentY] = currentWindow.getPosition();
+        const [width, height] = currentWindow.getSize();
+
+        const currentScreen = screen.getDisplayNearestPoint({ x: currentX, y: currentY });
+
+        let newX = currentX + 50;
+        let newY = currentY + 50;
+
+        const margin = 20;
+
+        if (newX + width > currentScreen.workArea.x + currentScreen.workArea.width - margin) {
+          newX = currentScreen.workArea.x + margin;
+          newY += 50;
+        }
+
+        if (newY + height > currentScreen.workArea.y + currentScreen.workArea.height - margin) {
+          newY = currentScreen.workArea.y + margin;
+        }
+
+        const newWindow = createBrowserWindow({
+          x: newX,
+          y: newY,
+          width: width,
+          height: height
+        });
+        newWindow.loadURL(url);
+      }
+    } else {
+      shell.openExternal(url);
+    }
+  });
+
+  return window;
+};
+
+const createWindow = () => {
+  const mainWindowState = windowStateKeeper({
+    defaultWidth: 1040,
+    defaultHeight: 750,
+  });
+
+  const mainWindow = createBrowserWindow({
+    ...mainWindowState,
+    show: false,
   });
 
   mainWindow.loadURL('https://www.panfu.me/play');
