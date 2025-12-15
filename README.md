@@ -14,13 +14,28 @@ The official desktop application for Panfu.me with integrated Flash Player suppo
 ## Features
 
 - Flash Player 32.0.0.465
-- Cross-platform support
+- Cross-platform support (Windows, macOS, Linux)
 - Automatic updates
 - Window state persistence
-- Zoom controls (Windows & macOS)
-- Reload shortcuts (Windows & macOS)
+- Zoom controls
+- Reload shortcuts
+- API bridge for Discord RPC and game integration
 
-> **Note:** This application uses Electron 11, as it's the last version that includes Chromium with PPAPI Flash Plugin support.
+> **Note:** This application uses Electron 11, as it's the last version with PPAPI Flash support. We've implemented multiple security measures to ensure safe operation.
+
+## Project Structure
+
+```
+panfu-desktop/
+├── index.js                   # Main entry point
+├── src/
+│   ├── discord-rpc.js         # Discord Rich Presence manager
+│   ├── window-manager.js      # Window creation and event handling
+│   ├── flash-plugin.js        # Flash plugin initialization
+│   └── preload.js             # Secure API bridge
+├── plugins/                   # Flash Player plugins
+├── build/                     # Build assets
+```
 
 ## Download
 
@@ -33,12 +48,6 @@ Prerequisites: [Node.js](https://nodejs.org) and [Git](https://git-scm.com)
 ```bash
 git clone https://github.com/teampanfu/panfu-desktop.git
 cd panfu-desktop
-
-# Using yarn (recommended)
-yarn
-yarn start
-
-# Using npm
 npm install
 npm start
 ```

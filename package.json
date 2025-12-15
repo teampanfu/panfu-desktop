@@ -13,16 +13,20 @@
   "license": "MIT",
   "author": "Panfu.me <webmaster@panfu.me>",
   "scripts": {
+    "start": "electron .",
     "package": "electron-builder --publish never",
     "release": "electron-builder --publish always",
-    "start": "electron ."
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "discord-rpc": "^4.0.1",
     "electron-updater": "^6.6.2",
     "electron-window-state": "^5.0.3"
   },
   "devDependencies": {
     "electron": "^11.5.0",
-    "electron-builder": "^26.0.12"
+    "electron-builder": "^26.0.12",
+    "eslint": "^9.39.2"
   }
 }
