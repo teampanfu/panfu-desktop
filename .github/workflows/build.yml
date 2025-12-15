@@ -1,40 +1,41 @@
-name: Build Desktop App
+name: Build and Release
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-    name: Build (${{ matrix.os }})
+    name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '22'
-          cache: 'yarn'
+          node-version: 25
+          cache: npm
 
       - name: Install dependencies
-        run: yarn install
+        run: npm ci
 
       - name: Build and release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            yarn release --x64 --ia32 --win
+            npm run release -- --x64 --ia32 --win
           elif [ "${{ matrix.os }}" = "macos-latest" ]; then
-            yarn release --mac --x64
+            npm run release -- --mac --x64
           else
-            yarn release --linux --x64 --ia32
+            npm run release -- --linux --x64 --ia32
           fi
         shell: bash
