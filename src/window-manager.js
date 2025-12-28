@@ -1,18 +1,6 @@
 const { BrowserWindow, Menu, shell, ipcMain } = require('electron');
 const path = require('path');
 
-// Whitelist of allowed domains (including subdomains)
-const ALLOWED_DOMAINS = ['panfu.me', 'oloko.me', 'panfu.test', 'oloko.test'];
-
-const isAllowedDomain = (url) => {
-  try {
-    const hostname = new URL(url).hostname;
-    return ALLOWED_DOMAINS.some(domain => hostname === domain || hostname.endsWith('.' + domain));
-  } catch {
-    return false;
-  }
-};
-
 const handleZoom = (webContents, zoomIn) => {
   const newZoomLevel = webContents.zoomLevel + (zoomIn ? 0.5 : -0.5);
   if (newZoomLevel >= -5.0 && newZoomLevel <= 5.0) {
@@ -102,25 +90,8 @@ const createBrowserWindow = (options = {}) => {
   setupKeyboardShortcuts(window);
   setupContextMenu(window);
   setupNewWindowHandler(window);
-  setupDomainWhitelist(window);
 
   return window;
-};
-
-const setupDomainWhitelist = (window) => {
-  window.webContents.on('will-navigate', (event, url) => {
-    if (!isAllowedDomain(url)) {
-      console.warn('Blocked navigation to:', url);
-      event.preventDefault();
-    }
-  });
-
-  window.webContents.on('will-redirect', (event, url) => {
-    if (!isAllowedDomain(url)) {
-      console.warn('Blocked redirect to:', url);
-      event.preventDefault();
-    }
-  });
 };
 
 const createMenu = () => {
