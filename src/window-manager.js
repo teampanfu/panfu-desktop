@@ -62,6 +62,12 @@ const setupNewWindowHandler = (window) => {
       const [width, height] = window.getSize();
       const newWindow = createBrowserWindow({ x: x + 50, y: y + 50, width, height });
       newWindow.loadURL(url);
+
+      newWindow.on('close', (event) => {
+        event.preventDefault();
+        newWindow.webContents.stop();
+        newWindow.destroy();
+      });
     } else {
       // Open all other links in default browser
       shell.openExternal(url);
