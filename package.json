@@ -21,12 +21,12 @@
   },
   "dependencies": {
     "discord-rpc": "^4.0.1",
-    "electron-updater": "^6.6.2",
+    "electron-updater": "^6.8.3",
     "electron-window-state": "^5.0.3"
   },
   "devDependencies": {
     "electron": "^11.5.0",
-    "electron-builder": "^26.0.12",
-    "eslint": "^9.39.2"
+    "electron-builder": "^26.8.1",
+    "eslint": "^10.1.0"
   }
 }
