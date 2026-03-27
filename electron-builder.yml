@@ -1,5 +1,6 @@
 appId: com.pandaland.desktop
 productName: Panfu Desktop
+npmRebuild: false
 
 directories:
   output: release
