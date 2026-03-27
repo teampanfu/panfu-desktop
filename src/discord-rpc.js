@@ -7,9 +7,9 @@ class DiscordRPCManager {
     this.isConnected = false;
     this.isInitialized = false;
     this.isEnabled = false;
-    this.currentActivity = null;
     this.reconnectTimer = null;
     this.startTimestamp = null;
+    this.initializePromise = null;
   }
 
   enable() {
@@ -18,9 +18,9 @@ class DiscordRPCManager {
     return { success: true, enabled: true };
   }
 
-  disable() {
+  async disable() {
     this.isEnabled = false;
-    this.disconnect();
+    await this.disconnect();
     return { success: true, enabled: false };
   }
 
@@ -29,28 +29,40 @@ class DiscordRPCManager {
       return;
     }
 
-    try {
-      this.client = new DiscordRPC.Client({ transport: 'ipc' });
-
-      this.client.on('ready', () => {
-        this.isConnected = true;
-        console.log('Discord RPC connected');
-      });
-
-      this.client.on('disconnected', () => {
-        console.log('Discord RPC disconnected');
-        this.isConnected = false;
-        this.scheduleReconnect();
-      });
-
-      await this.client.login({ clientId: this.clientId });
-      this.isInitialized = true;
-    } catch (error) {
-      console.warn('Discord RPC connection failed - Discord may not be running:', error.message);
-      this.isInitialized = false;
-      this.client = null;
-      this.scheduleReconnect();
+    if (this.initializePromise) {
+      return this.initializePromise;
     }
+
+    this.initializePromise = (async () => {
+      try {
+        this.client = new DiscordRPC.Client({ transport: 'ipc' });
+
+        this.client.on('ready', () => {
+          this.isConnected = true;
+          console.log('Discord RPC connected');
+        });
+
+        this.client.on('disconnected', () => {
+          console.log('Discord RPC disconnected');
+          this.isConnected = false;
+          this.isInitialized = false;
+          this.client = null;
+          this.scheduleReconnect();
+        });
+
+        await this.client.login({ clientId: this.clientId });
+        this.isInitialized = true;
+      } catch (error) {
+        console.warn('Discord RPC connection failed - Discord may not be running:', error.message);
+        this.isInitialized = false;
+        this.client = null;
+        this.scheduleReconnect();
+      } finally {
+        this.initializePromise = null;
+      }
+    })();
+
+    return this.initializePromise;
   }
 
   async updateActivity(activityData) {
@@ -66,11 +78,7 @@ class DiscordRPCManager {
       return;
     }
 
-    this.applyActivity(activityData);
-  }
-
-  applyActivity(activityData) {
-    const activity = {
+    this.client.setActivity({
       details: activityData.details || undefined,
       state: activityData.state || undefined,
       startTimestamp: this.startTimestamp || undefined,
@@ -79,13 +87,9 @@ class DiscordRPCManager {
       smallImageKey: activityData.smallImageKey || undefined,
       smallImageText: activityData.smallImageText || undefined,
       instance: false,
-    };
-
-    this.client.setActivity(activity).catch(error => {
+    }).catch(error => {
       console.error('Failed to set Discord activity:', error);
     });
-
-    this.currentActivity = activity;
   }
 
   scheduleReconnect() {
@@ -97,7 +101,6 @@ class DiscordRPCManager {
       this.reconnectTimer = null;
       if (this.isEnabled) {
         console.log('Attempting to reconnect Discord RPC...');
-        this.isInitialized = false;
         this.initialize();
       }
     }, 30000);
@@ -109,18 +112,23 @@ class DiscordRPCManager {
       this.reconnectTimer = null;
     }
 
-    if (this.client) {
+    const client = this.client;
+    if (client) {
+      this.client = null;
       try {
-        await this.client.destroy();
+        await client.clearActivity();
+      } catch (error) {
+        console.warn('Failed to clear Discord activity:', error.message);
+      }
+      try {
+        await client.destroy();
       } catch (error) {
         console.error('Error during Discord RPC disconnect:', error);
       }
-      this.client = null;
     }
 
     this.isConnected = false;
     this.isInitialized = false;
-    this.currentActivity = null;
     this.startTimestamp = null;
   }
 }
